@@ -10,10 +10,8 @@ public class Solution{
 
         String result = new String("" + num);
         while(!s.isEmpty()){
-            result = result + s.pop();    
+            result = result + s.pop();
         }
 
         return result;
     }
-can we change songgg
-not yet tpolo goodplssssssno:((())):
