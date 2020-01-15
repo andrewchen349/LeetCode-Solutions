@@ -1,16 +1,40 @@
-//Determine if a number n is a happy number where the sum of the square digits eventually leads to one
-//Happy Number if it leads to one, unhappy if not
-//Return 0 for unhappy number, one for happy
+class Solution {
 
 
-public class Solution{
-    public int HappyNum(int n){
+    public int square(int n ){
+        int sum = 0;
 
-        int
+        while(n > 0 ){
+            int num = n % 10;
+            sum += num * num;
+            n = n / 10;
+        }
 
+        return sum;
     }
 
-    public static void main(String args[]){
-        System.out.println("Works");
+
+    public boolean isHappy(int n) {
+
+        //Base Case
+        if(n == 1){
+            return true;
+        }
+
+        int counter = 0;
+        while(n != 1){
+
+            if(counter == 20){
+                break;
+            }
+
+            int temp = n;
+            n = square(temp);
+            if( n == 1){
+                return true;
+            }
+            counter++;
+        }
+        return false;
     }
 }
