@@ -1,56 +1,58 @@
 class Solution {
     public int[] dailyTemperatures(int[] T) {
-
         int[] result = new int[T.length];
-
+        
         if(T == null){
             return result;
         }
-
-        if(T.length == 1 ){
-           result[0] = 1;
-           return result;
-        }
-
-        int fast = 1;
-        int slow = 0;
-
-        while(fast < T.length && slow < T.length){
-            int counter  = 0;
-
-            if(T[fast] > T[slow]){
-                counter += 1;
-                result[slow] = counter;
-                slow += 1;
-                fast = slow + 1;
+        
+        Stack<Integer> days = new Stack<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        int ptr = T.length - 1;
+        while(ptr >= 0){
+            //No Days in Stack
+            if(days.isEmpty()){
+                days.push(T[ptr]);
+                map.put(T[ptr], ptr);
+                result[ptr] = 0;
+                ptr -= 1;    
             }
-
-            else{
-                while(T[fast] <= T[slow] && fast < T.length - 1){
-                    if(T[fast] > T[slow]){
-                        counter++;
-                        break;
+            //Temp at Day in stack is not empty
+            else if (!days.isEmpty() && days.peek() <= T[ptr]){
+                while(!days.isEmpty()){
+                    //Trying to find a warmer day
+                    if(days.peek() <= T[ptr]){
+                        days.pop();
+                        map.remove(T[ptr]);
                     }
                     else{
-                        counter += 1;
-                        fast++;
+                        result[ptr] = map.get(days.peek()) - ptr;
+                        days.push(T[ptr]);
+                        map.put(T[ptr], ptr);
+                        ptr -= 1;
+                        break;
                     }
                 }
-
-                if(T[fast] > T[slow]){
-                    result[slow] = counter + 1;
-                    slow += 1;
-                    fast = slow + 1;
+                
+                //We went thru the whole stack and cant find warmer day
+                if(days.isEmpty()){
+                    days.push(T[ptr]);
+                    map.put(T[ptr], ptr);
+                    ptr -= 1;
                 }
-                else{
-                    result[slow] = 0;
-                    slow += 1;
-                    fast = slow + 1;
-                }
-
+            }
+            else if(!days.isEmpty() && days.peek() > T[ptr]){
+                result[ptr] = map.get(days.peek()) - ptr;
+                days.push(T[ptr]);
+                map.put(T[ptr], ptr);
+                ptr -= 1;
+            }
+            else{
+                ptr -= 1;
             }
         }
-
         return result;
+        
     }
 }
